@@ -423,7 +423,7 @@
           </div>
 
           <div class="col-lg-5 col-md-12" data-aos="fade-up" data-aos-delay="300">
-            <form action="forms/contact.php" method="post" role="form" class="php-email-form">
+            <form id="contact-form" role="form" class="php-email-form">
               <div class="form-group">
                 <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required>
               </div>
@@ -492,12 +492,85 @@
   <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
   <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
   <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
-  <script src="assets/vendor/php-email-form/validate.js"></script>
+  <!-- <script src="assets/vendor/php-email-form/validate.js"></script> -->
 
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
   <!-- <script type="text/javascript" src="https://form.jotform.com/jsform/262112398664057"></script> -->
+<script>
+document.getElementById("contact-form").addEventListener("submit", function (event) {
+    event.preventDefault();
 
+    const form = this;
+
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const subject = document.getElementById("subject").value;
+    const message = form.querySelector('textarea[name="message"]').value;
+
+    const loading = form.querySelector(".loading");
+    const errorMessage = form.querySelector(".error-message");
+    const sentMessage = form.querySelector(".sent-message");
+
+    loading.style.display = "block";
+    errorMessage.style.display = "none";
+    sentMessage.style.display = "none";
+
+    // Hidden iframe used to submit to Jotform
+    const iframe = document.createElement("iframe");
+    iframe.name = "jotform-submit-frame";
+    iframe.style.display = "none";
+    document.body.appendChild(iframe);
+
+    // Create a temporary form that sends the data to Jotform
+    const jotform = document.createElement("form");
+    jotform.method = "POST";
+    jotform.action = "https://submit.jotform.com/submit/261966616336062";
+    jotform.target = "jotform-submit-frame";
+    jotform.style.display = "none";
+
+    function addField(name, value) {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = name;
+        input.value = value;
+        jotform.appendChild(input);
+    }
+
+    // Jotform Full Name
+    addField("q2_fullname0[first]", name);
+    addField("q2_fullname0[last]", "");
+
+    // Jotform Email
+    addField("q3_email1", email);
+
+    // Jotform Subject
+    addField("q6_subject", subject);
+
+    // Jotform Message
+    addField("q5_yourMessage", message);
+
+    // Jotform required submission parameters
+    addField("formID", "261966616336062");
+    addField("website", "");
+    addField("simple_spc", "261966616336062-261966616336062");
+
+    document.body.appendChild(jotform);
+
+    jotform.submit();
+
+    // Show success message after submission is sent
+    setTimeout(function () {
+        loading.style.display = "none";
+        sentMessage.style.display = "block";
+
+        form.reset();
+
+        jotform.remove();
+        iframe.remove();
+    }, 1500);
+});
+</script>
 </body>
 
 </html>
