@@ -28,7 +28,7 @@
   }
 
   /**
-   * Easy on scroll event listener 
+   * Easy on scroll event listener
    */
   const onscroll = (el, listener) => {
     el.addEventListener('scroll', listener)
@@ -38,19 +38,27 @@
    * Navbar links active state on scroll
    */
   let navbarlinks = select('#navbar .scrollto', true)
+
   const navbarlinksActive = () => {
     let position = window.scrollY + 200
+
     navbarlinks.forEach(navbarlink => {
       if (!navbarlink.hash) return
+
       let section = select(navbarlink.hash)
       if (!section) return
-      if (position >= section.offsetTop && position <= (section.offsetTop + section.offsetHeight)) {
+
+      if (
+        position >= section.offsetTop &&
+        position <= (section.offsetTop + section.offsetHeight)
+      ) {
         navbarlink.classList.add('active')
       } else {
         navbarlink.classList.remove('active')
       }
     })
   }
+
   window.addEventListener('load', navbarlinksActive)
   onscroll(document, navbarlinksActive)
 
@@ -66,6 +74,7 @@
     }
 
     let elementPos = select(el).offsetTop
+
     window.scrollTo({
       top: elementPos - offset,
       behavior: 'smooth'
@@ -76,6 +85,7 @@
    * Toggle .header-scrolled class to #header when page is scrolled
    */
   let selectHeader = select('#header')
+
   if (selectHeader) {
     const headerScrolled = () => {
       if (window.scrollY > 100) {
@@ -84,6 +94,7 @@
         selectHeader.classList.remove('header-scrolled')
       }
     }
+
     window.addEventListener('load', headerScrolled)
     onscroll(document, headerScrolled)
   }
@@ -92,6 +103,7 @@
    * Back to top button
    */
   let backtotop = select('.back-to-top')
+
   if (backtotop) {
     const toggleBacktotop = () => {
       if (window.scrollY > 100) {
@@ -100,6 +112,7 @@
         backtotop.classList.remove('active')
       }
     }
+
     window.addEventListener('load', toggleBacktotop)
     onscroll(document, toggleBacktotop)
   }
@@ -124,25 +137,28 @@
   }, true)
 
   /**
-   * Scrool with ofset on links with a class name .scrollto
+   * Scroll with offset on links with a class name .scrollto
    */
   on('click', '.scrollto', function(e) {
     if (select(this.hash)) {
       e.preventDefault()
 
       let navbar = select('#navbar')
+
       if (navbar.classList.contains('navbar-mobile')) {
         navbar.classList.remove('navbar-mobile')
+
         let navbarToggle = select('.mobile-nav-toggle')
         navbarToggle.classList.toggle('bi-list')
         navbarToggle.classList.toggle('bi-x')
       }
+
       scrollto(this.hash)
     }
   }, true)
 
   /**
-   * Scroll with ofset on page load with hash links in the url
+   * Scroll with offset on page load with hash links in the URL
    */
   window.addEventListener('load', () => {
     if (window.location.hash) {
@@ -150,7 +166,7 @@
         scrollto(window.location.hash)
       }
     }
-  });
+  })
 
   /**
    * Testimonials slider
@@ -179,45 +195,48 @@
         spaceBetween: 20
       }
     }
-  });
+  })
 
   /**
-   * Porfolio isotope and filter
+   * Portfolio isotope and filter
    */
   window.addEventListener('load', () => {
-    let portfolioContainer = select('.portfolio-container');
+    let portfolioContainer = select('.portfolio-container')
+
     if (portfolioContainer) {
       let portfolioIsotope = new Isotope(portfolioContainer, {
         itemSelector: '.portfolio-item',
         layoutMode: 'fitRows'
-      });
+      })
 
-      let portfolioFilters = select('#portfolio-flters li', true);
+      let portfolioFilters = select('#portfolio-flters li', true)
 
       on('click', '#portfolio-flters li', function(e) {
-        e.preventDefault();
+        e.preventDefault()
+
         portfolioFilters.forEach(function(el) {
-          el.classList.remove('filter-active');
-        });
-        this.classList.add('filter-active');
+          el.classList.remove('filter-active')
+        })
+
+        this.classList.add('filter-active')
 
         portfolioIsotope.arrange({
           filter: this.getAttribute('data-filter')
-        });
+        })
+
         portfolioIsotope.on('arrangeComplete', function() {
           AOS.refresh()
-        });
-      }, true);
+        })
+      }, true)
     }
-
-  });
+  })
 
   /**
-   * Initiate portfolio lightbox 
+   * Initiate portfolio lightbox
    */
   const portfolioLightbox = GLightbox({
     selector: '.portfolio-lightbox'
-  });
+  })
 
   /**
    * Portfolio details slider
@@ -234,8 +253,7 @@
       type: 'bullets',
       clickable: true
     }
-  });
-  
+  })
 
   /**
    * Animation on scroll
@@ -247,6 +265,117 @@
       once: true,
       mirror: false
     })
-  });
+  })
+
+  /**
+   * JotForm contact form
+   */
+  const contactForm = select('#contact-form')
+
+  if (contactForm) {
+
+    contactForm.addEventListener('submit', function(event) {
+      event.preventDefault()
+
+      const form = this
+
+      const name = document.getElementById("name").value
+      const email = document.getElementById("email").value
+      const subject = document.getElementById("subject").value
+      const message = form.querySelector('textarea[name="message"]').value
+
+      const loading = form.querySelector(".loading")
+      const errorMessage = form.querySelector(".error-message")
+      const sentMessage = form.querySelector(".sent-message")
+
+      loading.style.display = "block"
+      errorMessage.style.display = "none"
+      sentMessage.style.display = "none"
+
+      /*
+       * Hidden iframe prevents the browser from leaving the website
+       * when the form is submitted to JotForm.
+       */
+      const iframe = document.createElement("iframe")
+
+      iframe.name = "jotform-submit-frame"
+      iframe.style.display = "none"
+
+      document.body.appendChild(iframe)
+
+      /*
+       * Create temporary form for JotForm submission
+       */
+      const jotform = document.createElement("form")
+
+      jotform.method = "POST"
+      jotform.action = "https://submit.jotform.com/submit/262282360690053"
+      jotform.target = "jotform-submit-frame"
+      jotform.style.display = "none"
+
+      function addField(name, value) {
+        const input = document.createElement("input")
+
+        input.type = "hidden"
+        input.name = name
+        input.value = value
+
+        jotform.appendChild(input)
+      }
+
+      /*
+       * JotForm Name
+       */
+      addField("q3_name[first]", name)
+      addField("q3_name[last]", "")
+
+      /*
+       * JotForm Email
+       */
+      addField("q4_email", email)
+
+      /*
+       * JotForm Subject
+       */
+      addField("q5_subject", subject)
+
+      /*
+       * JotForm Message
+       */
+      addField("q6_message", message)
+
+      /*
+       * JotForm submission parameters
+       */
+      addField("formID", "262282360690053")
+      addField("website", "")
+      addField(
+        "simple_spc",
+        "262282360690053-262282360690053"
+      )
+
+      document.body.appendChild(jotform)
+
+      /*
+       * Submit to JotForm
+       */
+      jotform.submit()
+
+      /*
+       * Show success message
+       */
+      setTimeout(function() {
+
+        loading.style.display = "none"
+        sentMessage.style.display = "block"
+
+        form.reset()
+
+        jotform.remove()
+        iframe.remove()
+
+      }, 1500)
+    })
+  }
 
 })()
