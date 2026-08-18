@@ -31,78 +31,7 @@
   <link href="assets/css/style.css" rel="stylesheet">
 
   <style>
-    #clients .client-logo {
-      max-height: 85px;
-      width: auto;
-      object-fit: contain;
-      padding: 4px;
-      transition: transform 0.3s ease;
-    }
-    #clients .client-logo:hover {
-      transform: scale(1.08);
-    }
-   
-    #clients .col-lg-3,
-    #clients .col-md-4,
-    #clients .col-6 {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 12px 8px;
-    }
-    .plane-left {
-      transform: rotate(315deg);
-    }
 
-    /* ---------- FLOATING WHATSAPP BUTTON ---------- */
-    .whatsapp-float {
-      position: fixed;
-      bottom: 80px;
-      right: 20px;
-      z-index: 999;
-      background-color: #25d366;
-      color: #fff;
-      border-radius: 50px;
-      padding: 14px 20px;
-      font-size: 18px;
-      font-weight: 600;
-      box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-decoration: none;
-      transition: all 0.3s ease;
-      border: none;
-      cursor: pointer;
-      font-family: "Open Sans", sans-serif;
-    }
-    .whatsapp-float i {
-      font-size: 28px;
-      line-height: 1;
-    }
-    .whatsapp-float:hover {
-      transform: scale(1.05);
-      box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6);
-      color: #fff;
-      background-color: #1ebe5d;
-    }
-    .whatsapp-float .whatsapp-text {
-      display: inline-block;
-    }
-    @media (max-width: 575px) {
-      .whatsapp-float {
-        padding: 12px 16px;
-        font-size: 14px;
-        bottom: 70px;
-        right: 15px;
-      }
-      .whatsapp-float i {
-        font-size: 22px;
-      }
-      .whatsapp-float .whatsapp-text {
-        display: none; /* hide text on mobile, show only icon */
-      }
-    }
   </style>
 
 </head>
@@ -115,7 +44,7 @@
 
       <div class="logo">
         <a href="index.html">
-          <img src="assets/img/logo1.webp" alt="RMS Logo" class="img-fluid" style="max-height: 80px; width: auto;">
+          <img src="assets/img/newlogo.webp" alt="RMS Logo" class="img-fluid" style="max-height: 80px; width: auto;">
         </a>
       </div>
 
@@ -451,7 +380,6 @@
     </section><!-- End Contact Section -->
 
   </main><!-- End #main -->
-
   <!-- ======= Footer ======= -->
   <!-- <footer id="footer">
     <div class="container">
@@ -496,81 +424,7 @@
 
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
-  <!-- <script type="text/javascript" src="https://form.jotform.com/jsform/262112398664057"></script> -->
-<script>
-document.getElementById("contact-form").addEventListener("submit", function (event) {
-    event.preventDefault();
 
-    const form = this;
-
-    const name = document.getElementById("name").value;
-    const email = document.getElementById("email").value;
-    const subject = document.getElementById("subject").value;
-    const message = form.querySelector('textarea[name="message"]').value;
-
-    const loading = form.querySelector(".loading");
-    const errorMessage = form.querySelector(".error-message");
-    const sentMessage = form.querySelector(".sent-message");
-
-    loading.style.display = "block";
-    errorMessage.style.display = "none";
-    sentMessage.style.display = "none";
-
-    // Hidden iframe used to submit to Jotform
-    const iframe = document.createElement("iframe");
-    iframe.name = "jotform-submit-frame";
-    iframe.style.display = "none";
-    document.body.appendChild(iframe);
-
-    // Create a temporary form that sends the data to Jotform
-    const jotform = document.createElement("form");
-    jotform.method = "POST";
-    jotform.action = "https://submit.jotform.com/submit/261966616336062";
-    jotform.target = "jotform-submit-frame";
-    jotform.style.display = "none";
-
-    function addField(name, value) {
-        const input = document.createElement("input");
-        input.type = "hidden";
-        input.name = name;
-        input.value = value;
-        jotform.appendChild(input);
-    }
-
-    // Jotform Full Name
-    addField("q2_fullname0[first]", name);
-    addField("q2_fullname0[last]", "");
-
-    // Jotform Email
-    addField("q3_email1", email);
-
-    // Jotform Subject
-    addField("q6_subject", subject);
-
-    // Jotform Message
-    addField("q5_yourMessage", message);
-
-    // Jotform required submission parameters
-    addField("formID", "261966616336062");
-    addField("website", "");
-    addField("simple_spc", "261966616336062-261966616336062");
-
-    document.body.appendChild(jotform);
-
-    jotform.submit();
-
-    // Show success message after submission is sent
-    setTimeout(function () {
-        loading.style.display = "none";
-        sentMessage.style.display = "block";
-
-        form.reset();
-
-        jotform.remove();
-        iframe.remove();
-    }, 1500);
-});
-</script>
 </body>
 
 </html>
